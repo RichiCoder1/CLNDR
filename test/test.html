@@ -3,7 +3,7 @@
 <head>
     <title>CLNDR Tests</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../demo/css/clndr.css">
+    <link rel="stylesheet" href="./clndr.css">
 </head>
 <body>
     <div class="container">
@@ -222,7 +222,7 @@
         </div>
         <% _.each(months, function (oneMonth) { %>
         <div class="clndr-controls">
-            <div class="month"><%= oneMonth.month.format('MMMM YYYY') %></div>
+            <div class="month"><%= oneMonth.month.toFormat('MMMM yyyy') %></div>
         </div>
         <div class="clndr-grid">
             <div class="days-of-the-week">
@@ -244,7 +244,7 @@
         <div class="clndr-controls">
             <div class="clndr-previous-button">&lsaquo;</div>
             <div class="month">
-                <%= intervalStart.format('MM/DD') %> - <%= intervalEnd.format('MM/DD') %>
+                <%= intervalStart.toFormat('MM/dd') %> - <%= intervalEnd.toFormat('MM/dd') %>
             </div>
             <div class="clndr-next-button">&rsaquo;</div>
         </div>
@@ -261,11 +261,5 @@
             </div>
         </div>
     </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.0/moment.min.js"></script>
-    <script src="../src/clndr.js"></script>
-    <script src="test.js"></script>
 </body>
 </html>

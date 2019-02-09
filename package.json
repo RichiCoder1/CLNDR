@@ -1,34 +1,59 @@
 {
-  "name": "clndr",
-  "version": "1.4.7",
-  "description": "A jQuery calendar plugin that uses HTML templates.",
-  "author": "Kyle Stetz",
+  "name": "clndr2",
+  "version": "2.0.0",
+  "description": "A javascript calendar plugin that uses HTML templates.",
+  "author": "Richard Simpson <richardsimpson@outlook.com>",
   "license": "MIT",
+  "main": "dist/clndr.js",
+  "module": "dist/clndr.mjs",
+  "scripts": {
+    "build:clean": "rimraf dist/**/*",
+    "build:types": "tsc",
+    "build:compile": "webpack",
+    "watch:build": "webpack --watch --progress --mode development",
+    "test:build": "webpack --config test/webpack.test.config.js --mode development",
+    "test:start": "webpack-dev-server --config test/webpack.test.config.js --start",
+    "test": "run-p watch:build test:**",
+    "build": "run-s build:**"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kylestetz/CLNDR"
+    "url": "https://github.com/RichiCoder1/CLNDR"
   },
   "keywords": [
     "clndr",
-    "calendar",
-    "jquery",
-    "plugin",
-    "widget",
-    "jquery-plugin"
+    "calendar"
   ],
   "bugs": {
-    "url": "https://github.com/kylestetz/CLNDR/issues"
+    "url": "https://github.com/RichiCoder1/CLNDR/issues"
   },
-  "homepage": "https://github.com/kylestetz/CLNDR",
-  "main": "src/clndr.js",
+  "homepage": "https://github.com/RichiCoder1/CLNDR",
   "dependencies": {
-    "jquery": ">=1.9",
-    "moment": ">=2.8.3"
+    "luxon": "^1.11.1"
   },
   "devDependencies": {
-    "grunt": "*",
-    "grunt-contrib-uglify": "~0.2.4",
-    "grunt-contrib-less": "~0.8.0",
-    "grunt-contrib-watch": "~0.5.3"
-  }
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/lodash-es": "^4.17.1",
+    "@types/luxon": "^1.10.2",
+    "babel-loader": "^8.0.5",
+    "del-cli": "^1.1.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "lodash-es": "^4.17.11",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^2.6.3",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "not dead"
+  ]
 }

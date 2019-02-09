@@ -3,3 +3,5 @@
 /bower_components
 .DS_Store
 commit_checklist.md
+/dist
+/old*

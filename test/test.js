@@ -1,57 +1,56 @@
+import Clndr from "../dist/clndr.js";
+import { DateTime } from "luxon";
+
 var clndr = {};
 
-if (!window.console) {
-    window.console = {
-        log: function (whatever) {
-          // sad face.
-        }
-    };
-}
+function ready(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading"){
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
 
-$( function() {
+ready(() => {
     // Set up the events array
     var eventsArray = [
         {
             title: 'This is an Event',
-            date: moment().format('YYYY-MM-') + '07'
+            date: DateTime.local().toFormat('yyyy-MM-') + '07'
         }, {
             title: 'Another Event',
-            date: moment().format('YYYY-MM-') + '23'
+            date: DateTime.local().toFormat('yyyy-MM-') + '23'
         }
     ];
 
-    // Declare all vars at the top
-    var multidayArray, multidayMixedArray, multidayMixedPerfArray, daysInMonth,
-        start, multidayLongArray, performanceSeconds;
-
     // Default
     // =========================================================================
-    clndr.defaultSetup = $('#default').clndr();
+    clndr.defaultSetup = new Clndr(document.querySelector('#default'));
 
     // Test showAdjacentMonths and adjacentDaysChangeMonth.
     // Edges of other months should be visible and clicking them should switch
     // the month.
     // =========================================================================
-    clndr.adjacent = $('#adjacent').clndr({
+    clndr.adjacent = new Clndr(document.querySelector('#adjacent'), {
         showAdjacentMonths: true,
         adjacentDaysChangeMonth: true
     });
 
     // Pass in a template
     // =========================================================================
-    clndr.passInATemplate = $('#pass-in-a-template').clndr({
-        template: $('#clndr-template').html()
+    clndr.passInATemplate = new Clndr(document.querySelector('#pass-in-a-template'), {
+        template: document.querySelector('#clndr-template').innerHTML
     });
 
     // Pass in events
     // =========================================================================
-    clndr.passInEvents = $('#pass-in-events').clndr({
+    clndr.passInEvents = new Clndr(document.querySelector('#pass-in-events'), {
         events: eventsArray
     });
 
     // Test the clickEvent callbacks
     // =========================================================================
-    clndr.callbacks = $('#callbacks').clndr({
+    clndr.callbacks = new Clndr(document.querySelector('#callbacks'), {
         ready: function () {
             console.log('The callbacks calendar just called ready()');
         },
@@ -88,19 +87,21 @@ $( function() {
 
     // Test multi-day events
     // =========================================================================
-    multidayArray = [
+    const multidayArray = [
         {
             title: 'Multi1',
-            endDate: moment().format('YYYY-MM-') + '17',
-            startDate: moment().format('YYYY-MM-') + '12'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '17',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '12'
         }, {
             title: 'Multi2',
-            endDate: moment().format('YYYY-MM-') + '27',
-            startDate: moment().format('YYYY-MM-') + '24'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '27',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '24'
         }
     ];
 
-    clndr.multiday = $('#multiday').clndr({
+    console.debug("multi", multidayArray);
+
+    clndr.multiday = new Clndr(document.querySelector('#multiday'), {
         events: multidayArray,
         multiDayEvents: {
             endDate: 'endDate',
@@ -115,22 +116,22 @@ $( function() {
 
     // Test multi-day events
     // =========================================================================
-    multidayMixedArray = [
+    const multidayMixedArray = [
         {
             title: 'Multi1',
-            endDate: moment().format('YYYY-MM-') + '17',
-            startDate: moment().format('YYYY-MM-') + '12'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '17',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '12'
         }, {
             title: 'Multi2',
-            endDate: moment().format('YYYY-MM-') + '27',
-            startDate: moment().format('YYYY-MM-') + '24'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '27',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '24'
         }, {
             title: 'Single',
-            date: moment().format('YYYY-MM-') + '19'
+            date: DateTime.local().toFormat('yyyy-MM-') + '19'
         }
     ];
 
-    clndr.multidayMixed = $('#multiday-mixed').clndr({
+    clndr.multidayMixed = new Clndr(document.querySelector('#multiday-mixed'), {
         events: multidayMixedArray,
         multiDayEvents: {
             singleDay: 'date',
@@ -147,21 +148,21 @@ $( function() {
     // Test multi-day event performance
     // =========================================================================
     // Start with two truly multiday events.
-    multidayMixedPerfArray = [
+    const multidayMixedPerfArray = [
         {
             title: 'Multi1',
-            endDate: moment().format('YYYY-MM-') + '17',
-            startDate: moment().format('YYYY-MM-') + '12'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '17',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '12'
         }, {
             title: 'Multi2',
-            endDate: moment().format('YYYY-MM-') + '27',
-            startDate: moment().format('YYYY-MM-') + '24'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '27',
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '24'
         }
     ];
 
     // Add ten events every day this month that are only a day long,
     // which triggers clndr to use a performance optimization.
-    daysInMonth = moment().daysInMonth();
+    const daysInMonth = DateTime.local().daysInMonth;
 
     for (var i = 1; i <= daysInMonth; i++) {
         var padDay = (i < 10)
@@ -169,16 +170,16 @@ $( function() {
             : i;
         for (var j = 0; j < 10; j++) {
             multidayMixedPerfArray.push({
-                endDate: moment().format('YYYY-MM-') + padDay,
-                startDate: moment().format('YYYY-MM-') + padDay
+                endDate: DateTime.local().toFormat('yyyy-MM-') + padDay,
+                startDate: DateTime.local().toFormat('yyyy-MM-') + padDay
             });
         }
     }
 
     // Start timer
-    start = moment();
+    const start = DateTime.local();
 
-    clndr.multidayMixedPerformance = $('#multiday-mixed-performance').clndr({
+    clndr.multidayMixedPerformance = new Clndr(document.querySelector('#multiday-mixed-performance'), {
         events: multidayMixedPerfArray,
         multiDayEvents: {
             singleDay: 'date',
@@ -193,25 +194,25 @@ $( function() {
     });
 
     // Capture the end time
-    performanceSeconds = moment.duration(moment().diff(start)).asSeconds();
+    const performanceSeconds = DateTime.local().diff(start, 'seconds').toObject()["seconds"];
 
-    $('#multiday-mixed-performance-val').text(performanceSeconds);
+    document.querySelector('#multiday-mixed-performance-val').textContent = performanceSeconds;
 
     // Test really long multi-day events
     // =========================================================================
-    multidayLongArray = [
+    const multidayLongArray = [
         {
             title: 'Multi1',
-            endDate: moment().format('YYYY-MM-') + '17',
-            startDate: moment().subtract(3, 'months').format('YYYY-MM-') + '12'
+            endDate: DateTime.local().toFormat('yyyy-MM-') + '17',
+            startDate: DateTime.local().minus({ months: 3 }).toFormat('yyyy-MM-') + '12'
         }, {
             title: 'Multi2',
-            startDate: moment().format('YYYY-MM-') + '24',
-            endDate: moment().add(4, 'months').format('YYYY-MM-') + '27'
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '24',
+            endDate: DateTime.local().plus({ months: 4 }).toFormat('yyyy-MM-') + '27'
         }
     ];
 
-    clndr.multidayLong = $('#multiday-long').clndr({
+    clndr.multidayLong = new Clndr(document.querySelector('#multiday-long'), {
         events: multidayLongArray,
         multiDayEvents: {
             endDate: 'endDate',
@@ -227,14 +228,14 @@ $( function() {
     // Test constraints
     // The 4th of this month to the 12th of next month
     // =========================================================================
-    clndr.constraints = $('#constraints').clndr({
+    clndr.constraints = new Clndr(document.querySelector('#constraints'), {
         constraints: {
-            startDate: moment().format('YYYY-MM-') + '04',
-            endDate: moment().add(1, 'months').format('YYYY-MM-12')
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '04',
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-12')
         },
         clickEvents: {
             click: function (target) {
-                if (!$(target.element).hasClass('inactive')) {
+                if (!target.element.classList.includes('inactive')) {
                     console.log('You picked a valid date.');
                 } else {
                     console.log('You can\'t pick that date.');
@@ -246,53 +247,53 @@ $( function() {
     // Test constraints
     // The 22nd of previous month to the 5th of next month
     // =========================================================================
-    clndr.prevNextMonthConstraints = $('#prev-next-month-constraints').clndr({
+    clndr.prevNextMonthConstraints = new Clndr(document.querySelector('#prev-next-month-constraints'), {
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-05'),
-            startDate: moment().subtract(1, 'months').format('YYYY-MM-') + '22'
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-05'),
+            startDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-') + '22'
         }
     });
 
     // Test constraints
     // The 2nd to the 5th of previous month
     // =========================================================================
-    clndr.prevMonthConstraints = $('#prev-month-constraints').clndr({
+    clndr.prevMonthConstraints = new Clndr(document.querySelector('#prev-month-constraints'), {
         constraints: {
-            endDate: moment().subtract(1, 'months').format('YYYY-MM-05'),
-            startDate: moment().subtract(1, 'months').format('YYYY-MM-') + '02'
+            endDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-05'),
+            startDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-') + '02'
         }
     });
 
     // Test constraints
     // The 22nd to the 25th of next month
     // =========================================================================
-    clndr.nextMonthConstraints = $('#next-month-constraints').clndr({
+    clndr.nextMonthConstraints = new Clndr(document.querySelector('#next-month-constraints'), {
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-25'),
-            startDate: moment().add(1, 'months').format('YYYY-MM-') + '22'
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-25'),
+            startDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-') + '22'
         }
     });
 
     // Test the start constraint by itself (4th of this month)
     // =========================================================================
-    clndr.startConstraint = $('#start-constraint').clndr({
+    clndr.startConstraint = new Clndr(document.querySelector('#start-constraint'), {
         constraints: {
-            startDate: moment().format('YYYY-MM-') + '04'
+            startDate: DateTime.local().toFormat('yyyy-MM-') + '04'
         }
     });
 
     // Test the end constraint by itself (12th of next month)
     // =========================================================================
-    clndr.endConstraint = $('#end-constraint').clndr({
+    clndr.endConstraint = new Clndr(document.querySelector('#end-constraint'), {
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-') + '12'
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-') + '12'
         }
     });
 
     // Test API
     // You could do this with any instance but this makes for a nice reminder
     // =========================================================================
-    clndr.api = $('#api').clndr({
+    clndr.api = new Clndr(document.querySelector('#api'), {
         clickEvents: {
             onMonthChange: function (month) {
                 console.log('onMonthChange was called.');
@@ -305,13 +306,13 @@ $( function() {
 
     // Test forceSixRows option
     // =========================================================================
-    clndr.sixRows = $('#six-rows').clndr({
+    clndr.sixRows = new Clndr(document.querySelector('#six-rows'), {
         forceSixRows: true
     });
 
     // Test options.classes
     // =========================================================================
-    clndr.customClasses = $('#custom-classes').clndr({
+    clndr.customClasses = new Clndr(document.querySelector('#custom-classes'), {
         events: eventsArray,
         classes: {
             past: "my-past",
@@ -331,12 +332,12 @@ $( function() {
 
     // Test lengthOfTime.months option (three month views in one)
     // =========================================================================
-    clndr.threeMonths = $('#three-months').clndr({
-        template: $('#clndr-multimonth-template').html(),
+    clndr.threeMonths = new Clndr(document.querySelector('#three-months'), {
+        template: document.querySelector('#clndr-multimonth-template').innerHTML,
         lengthOfTime: {
             months: 3,
             interval: 1,
-            startDate: moment().subtract(1, 'months').startOf('month')
+            startDate: DateTime.local().minus({ months: 1 }).startOf('month')
         },
         clickEvents: {
             click: function (target) {
@@ -356,13 +357,13 @@ $( function() {
 
     // Test lengthOfTime.months option (three month views in one)
     // =========================================================================
-    clndr.threeMonthsWithEvents = $('#three-months-with-events').clndr({
-        template: $('#clndr-multimonth-template').html(),
+    clndr.threeMonthsWithEvents = new Clndr(document.querySelector('#three-months-with-events'), {
+        template: document.querySelector('#clndr-multimonth-template').innerHTML,
         events: multidayArray,
         lengthOfTime: {
             months: 3,
             interval: 1,
-            startDate: moment().subtract(1, 'months').startOf('month')
+            startDate: DateTime.local().minus({ months: 1 }).startOf('month')
         },
         multiDayEvents: {
             endDate: 'endDate',
@@ -386,13 +387,13 @@ $( function() {
 
     // Test lengthOfTime.months option (three month views in one)
     // =========================================================================
-    clndr.threeMonthsWithContraints = $('#three-months-with-constraints').clndr({
-        template: $('#clndr-multimonth-template').html(),
+    clndr.threeMonthsWithConstraints = new Clndr(document.querySelector('#three-months-with-constraints'), {
+        template: document.querySelector('#clndr-multimonth-template').innerHTML,
         events: multidayArray,
         lengthOfTime: {
             months: 3,
             interval: 1,
-            startDate: moment().subtract(1, 'months').startOf('month')
+            startDate: DateTime.local().minus({ months: 1 }).startOf('month')
         },
         multiDayEvents: {
             endDate: 'endDate',
@@ -413,26 +414,26 @@ $( function() {
             }
         },
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-12'),
-            startDate: moment().subtract(2, 'months').format('YYYY-MM-DD')
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-12'),
+            startDate: DateTime.local().minus({ months: 2 }).toFormat('yyyy-MM-dd')
         }
     });
 
     // Test lengthOfTime.days option (14 days incremented by 7)
     // =========================================================================
-    clndr.twoWeeks = $('#one-week').clndr({
-        template: $('#clndr-oneweek-template').html(),
+    clndr.twoWeeks = new Clndr(document.querySelector('#one-week'), {
+        template: document.querySelector('#clndr-oneweek-template').innerHTML,
         lengthOfTime: {
             days: 14,
             interval: 7,
-            startDate: moment().weekday(0)
+            startDate: DateTime.local().set({weekday: 0})
         }
     });
 
     // Test lengthOfTime.days option (14 days incremented by 7)
     // =========================================================================
-    clndr.twoWeeksWithConstraints = $('#one-week-with-constraints').clndr({
-        template: $('#clndr-oneweek-template').html(),
+    clndr.twoWeeksWithConstraints = new Clndr(document.querySelector('#one-week-with-constraints'), {
+        template: document.querySelector('#clndr-oneweek-template').innerHTML,
         events: multidayArray,
         multiDayEvents: {
             endDate: 'endDate',
@@ -441,62 +442,62 @@ $( function() {
         lengthOfTime: {
             days: 14,
             interval: 7,
-            startDate: moment().weekday(0)
+            startDate: DateTime.local().set({ weekday: 0 })
         },
         constraints: {
-            startDate: moment().format('YYYY-MM-04'),
-            endDate: moment().add(1, 'months').format('YYYY-MM-12')
+            startDate: DateTime.local().toFormat('yyyy-MM-04'),
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-12')
         }
     });
 
     // Test lengthOfTime.days option with constraints (14 days incremented by 7)
     // The 2nd to the 5th of previous month
     // =========================================================================
-    clndr.twoWeeksWithPrevMonthConstraints = $('#one-week-with-prev-month-constraints').clndr({
-        template: $('#clndr-oneweek-template').html(),
+    clndr.twoWeeksWithPrevMonthConstraints = new Clndr(document.querySelector('#one-week-with-prev-month-constraints'), {
+        template: document.querySelector('#clndr-oneweek-template').innerHTML,
         lengthOfTime: {
             days: 14,
             interval: 7,
-            startDate: moment().weekday(0)
+            startDate: DateTime.local().set({ weekday: 0 })
         },
         constraints: {
-            endDate: moment().subtract(1, 'months').format('YYYY-MM-05'),
-            startDate: moment().subtract(1, 'months').format('YYYY-MM-02')
+            endDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-05'),
+            startDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-02')
         }
     });
 
     // Test lengthOfTime.days option with constraints (14 days incremented by 7)
     // The 22nd to the 25th of next month
     // =========================================================================
-    clndr.twoWeeksWithNextMonthConstraints = $('#one-week-with-next-month-constraints').clndr({
-        template: $('#clndr-oneweek-template').html(),
+    clndr.twoWeeksWithNextMonthConstraints = new Clndr(document.querySelector('#one-week-with-next-month-constraints'), {
+        template: document.querySelector('#clndr-oneweek-template').innerHTML,
         lengthOfTime: {
             days: 14,
             interval: 7,
-            startDate: moment().weekday(0)
+            startDate: DateTime.local().set({ weekday: 0 })
         },
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-25'),
-            startDate: moment().add(1, 'months').format('YYYY-MM-22')
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-25'),
+            startDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-22')
         }
     });
 
     // Test selectedDate option
     // =========================================================================
-    clndr.selectedDate = $('#selected-date').clndr({
+    clndr.selectedDate = new Clndr(document.querySelector('#selected-date'), {
         trackSelectedDate: true,
-        template: $('#clndr-template').html()
+        template: document.querySelector('#clndr-template').innerHTML
     });
 
     // Test selectedDate option with ignoreInactiveDaysInSelection
     // =========================================================================
-    clndr.selectedDateIgnoreInactive = $('#selected-date-ignore-inactive').clndr({
-        template: $('#clndr-template').html(),
+    clndr.selectedDateIgnoreInactive = new Clndr(document.querySelector('#selected-date-ignore-inactive'), {
+        template: document.querySelector('#clndr-template').innerHTML,
         trackSelectedDate: true,
         ignoreInactiveDaysInSelection: true,
         constraints: {
-            endDate: moment().add(1, 'months').format('YYYY-MM-12'),
-            startDate: moment().subtract(1, 'months').format('YYYY-MM-DD')
+            endDate: DateTime.local().plus({ months: 1 }).toFormat('yyyy-MM-12'),
+            startDate: DateTime.local().minus({ months: 1 }).toFormat('yyyy-MM-dd')
         }
     });
 });
