@@ -3,9 +3,9 @@ const nodeExternals = require('webpack-node-externals');
 
 module.exports = {
   mode: 'development',
-  entry: './src/clndr.ts',
+  entry: './src/main.ts',
   resolve: {
-    extensions: ['.js', '.mjs', '.ts', '.json', '.wasm']
+    extensions: ['.js', '.ts', '.json', '.wasm']
   },
   module: {
     rules: [
@@ -20,9 +20,9 @@ module.exports = {
   },
   externals: [nodeExternals()],
   output: {
-    filename: 'clndr.js',
+    filename: 'clndrfx.umd.js',
     path: path.resolve(__dirname, 'dist'),
-    library: 'clndr',
+    library: 'clndrfx',
     libraryTarget: 'umd'
   }
 };

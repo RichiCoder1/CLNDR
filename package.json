@@ -1,59 +1,53 @@
 {
-  "name": "clndr2",
-  "version": "2.0.0",
+  "name": "@clndrfx/core",
+  "version": "0.1.0",
   "description": "A javascript calendar plugin that uses HTML templates.",
   "author": "Richard Simpson <richardsimpson@outlook.com>",
   "license": "MIT",
-  "main": "dist/clndr.js",
-  "module": "dist/clndr.mjs",
+  "main": "dist/clndrfx.umd.js",
+  "module": "dist/cldnrfx.esm.js",
+  "types": "dist/clndrfx.d.ts",
   "scripts": {
+    "lint:types": "tsc",
     "build:clean": "rimraf dist/**/*",
-    "build:types": "tsc",
-    "build:compile": "webpack",
-    "watch:build": "webpack --watch --progress --mode development",
-    "test:build": "webpack --config test/webpack.test.config.js --mode development",
-    "test:start": "webpack-dev-server --config test/webpack.test.config.js --start",
-    "test": "run-p watch:build test:**",
+    "build:esm:compile": "tsc --module ESNext --target ESNext",
+    "build:esm:rename-script": "renamer --find main.js --replace clndrfx.esm.js dist/*",
+    "build:esm:rename-d-ts": "renamer --find main.d.ts --replace clndrfx.d.ts dist/*",
+    "build:umd:compile": "tsc --module UMD --target ES2015 -d false",
+    "build:umd:rename": "renamer --find main.js --replace clndrfx.umd.js dist/* ",
+    "test:copy": "cpy dist/** test/dist/",
+    "test:serve": "serve test/",
+    "test": "run-s build:** test:**",
     "build": "run-s build:**"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RichiCoder1/CLNDR"
+    "url": "https://github.com/RichiCoder1/ClndrFx"
   },
   "keywords": [
     "clndr",
     "calendar"
   ],
   "bugs": {
-    "url": "https://github.com/RichiCoder1/CLNDR/issues"
+    "url": "https://github.com/RichiCoder1/ClndrFx/issues"
   },
-  "homepage": "https://github.com/RichiCoder1/CLNDR",
+  "homepage": "https://github.com/RichiCoder1/ClndrFx",
   "dependencies": {
     "luxon": "^1.11.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/preset-typescript": "^7.1.0",
     "@types/lodash-es": "^4.17.1",
     "@types/luxon": "^1.10.2",
-    "babel-loader": "^8.0.5",
+    "cpy-cli": "^2.0.0",
     "del-cli": "^1.1.0",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
     "lodash-es": "^4.17.11",
     "npm-run-all": "^4.1.5",
+    "renamer": "^1.1.1",
     "rimraf": "^2.6.3",
+    "serve": "^10.1.2",
     "typescript": "^3.3.3",
     "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14",
-    "webpack-node-externals": "^1.7.2"
-  },
-  "browserslist": [
-    "last 1 version",
-    "> 1%",
-    "not dead"
-  ]
+    "webpack-cli": "^3.2.3"
+  }
 }

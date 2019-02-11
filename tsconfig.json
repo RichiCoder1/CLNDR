@@ -1,10 +1,12 @@
 {
     "compilerOptions": {
-      "target": "ES2018",
+      "target": "ESNext",
       "module": "ESNext",
-      "emitDeclarationOnly": true,
       "declaration": true,
-      "outFile": "dist/clndr.js",
+      "outDir": "dist/",
       "strict": false
-    }
+    },
+    "include": [
+      "src/main.ts"
+    ]
   }
